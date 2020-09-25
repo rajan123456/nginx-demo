@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Chart.Name}}-service
+  labels: 
+    app.kubernetes.io/name: {{.Chart.Name}}-service
+    helm.sh/chart: {{.Chart.Name}}-{{.Chart.Version}}
+    app.kubernetes.io/instance: {{.Release.Name}}
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: serviceport
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.containerPorts.http }}
+  selector: 
+      app.kubernetes.io/instance: {{.Release.Name}}
+      app.kubernetes.io/managed-by: Helm

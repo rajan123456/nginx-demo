@@ -1,0 +1,6 @@
+Congratulations! The chart has been deployed successfully.
+{{- if .Values.service.tls.enabled}}
+Access the service using https://example.local:8080/
+{{else}}
+Access the service using http://example.local:8080/
+{{- end}}

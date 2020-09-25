@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+{{- if .Values.service.tls.enabled}}
+{{- range $path, $config := .Values.serverBlockHTTPS }}
+  {{ $path }}: |
+{{ $config | indent 4 -}}
+{{- end -}}
+{{- else}}
+{{- range $path, $config := .Values.serverBlockHTTP }}
+  {{ $path }}: |
+{{ $config | indent 4 -}}
+{{- end -}}
+{{- end -}}

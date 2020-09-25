@@ -1,0 +1,102 @@
+image:
+  registry: docker.io
+  repository: nginx
+  tag: 1.17
+  pullPolicy: IfNotPresent
+
+## Kubernetes Cluster Domain
+clusterDomain: cluster.local
+
+## Add more upstream services into the config block
+serverBlockHTTP:
+  default.conf: |
+    server {
+      listen 8080;
+      server_name example.local;
+
+      # location /upstream_1/ {
+      #   proxy_set_header Host $host;
+      #   proxy_pass http://upsteam1:80/;
+      # }
+
+      # location /upstream_2/ {
+      # proxy_set_header Host $host;
+      #   proxy_pass http://upsteam2:80/;
+      # }
+
+      location / {
+        root /usr/share/nginx/html;
+        index index.html;
+      }
+    }
+
+## Add more upstream services into the config block
+serverBlockHTTPS:
+  default.conf: |
+    server {
+      listen 8080 ssl;
+      server_name example.local;
+
+      # location /upstream_1/ {
+      #   proxy_set_header Host $host;
+      #   proxy_pass http://upsteam1:80/;
+      # }
+
+      # location /upstream_2/ {
+      # proxy_set_header Host $host;
+      #   proxy_pass http://upsteam2:80/;
+      # }
+
+      location / {
+        root /usr/share/nginx/html;
+        index index.html;
+      }
+      
+      ssl_certificate /etc/certs/tls.crt;
+      ssl_certificate_key /etc/certs/tls.key;
+      ssl_client_certificate /etc/certs/ca.crt;
+      ssl_verify_client optional;
+    }
+
+## Number of replicas to deploy
+replicaCount: 3
+
+## Configures the ports NGINX listens on
+containerPorts:
+  http: 8080
+
+## NGINX containers' resource requests and limits
+resources:
+  limits: {}
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests: {}
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## NGINX containers' liveness and readiness probes.
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  timeoutSeconds: 3
+  periodSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+## NGINX Service properties
+service:
+  ## Service type
+  type: LoadBalancer
+  ## Service Port
+  port: 8080
+  tls:
+    ## Controls if SSL is enabled or not
+    enabled: true
+    hostname: example.local
