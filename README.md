@@ -25,3 +25,15 @@ service:
  ```
  
  4. Generates self-signed CA and leaf certificates for NGINX in case of HTTPS based configuration is enabled.
+
+## Quickstart
+
+1. Add helm repository where chart is hosted:
+```
+helm repo add rajan https://raw.githubusercontent.com/rajan123456/helm-charts/master/
+```
+2. Install the chart
+```
+helm install demo-nginx rajan/nginx
+```
+3. In case running on local system, (Docker Desktop) add host file entry for example.local pointed to 127.0.0.1
